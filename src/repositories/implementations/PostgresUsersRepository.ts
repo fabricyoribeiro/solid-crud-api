@@ -33,7 +33,7 @@ export class PostgresUserRepository implements IUsersRepository {
     }
   }
 
-  async update(id: string, data: IUpdateUserRequestDTO){
+  async update(id: string, data: IUpdateUserRequestDTO) {
     try {
       await prisma.user.update({
         where: { id },
@@ -41,6 +41,14 @@ export class PostgresUserRepository implements IUsersRepository {
       })
     } catch (error) {
       throw new Error(`error while updating user: ${error.message}`)
+    }
+  }
+
+  async delete(id: string): Promise<void> {
+    try {
+      await prisma.user.delete({ where: { id } })
+    } catch (error) {
+      throw new Error(`error while deleting user: ${error.message}`)
     }
   }
 
