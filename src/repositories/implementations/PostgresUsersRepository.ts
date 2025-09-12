@@ -10,12 +10,21 @@ export class PostgresUserRepository implements IUsersRepository {
       await prisma.user.create({ data: user })
     } catch (error) {
       console.error('error while saving user', error)
-      throw new Error("database error")
+      throw new Error("database error: ", error)
     }
   }
 
   async findByEmail(email: string): Promise<User | null> {
     return prisma.user.findFirst({ where: { email } })
+  }
+
+  async getAll(): Promise<User[]> {
+    try {
+      const users = prisma.user.findMany()
+      return users
+    } catch (error) {
+      throw new Error("error while getting users: ", error)
+    }
   }
 
 }
