@@ -1,6 +1,6 @@
 import { User } from "../../entities/User.js";
 import type { IUsersRepository } from "../../repositories/IUsersRepository.js";
-import type { ICreateUserRequestDTO } from "./CreateUserDTO.js";
+import type { ICreateUserRequestDTO } from "../../dtos/CreateUserDTO.js";
 
 export class CreateUserUseCase {
   
