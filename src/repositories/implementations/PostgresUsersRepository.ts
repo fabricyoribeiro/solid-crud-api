@@ -1,5 +1,5 @@
 import type { User } from "../../entities/User.js";
-import { prisma } from "../../lib/prisma.js";
+import { prisma } from "../../database/prisma.js";
 import type { IUsersRepository } from "../IUsersRepository.js";
 
 export class PostgresUserRepository implements IUsersRepository {
