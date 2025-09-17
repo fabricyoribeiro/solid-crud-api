@@ -1,6 +1,6 @@
 import { User } from "../../entities/User.js";
 import type { IUsersRepository } from "../../repositories/IUsersRepository.js";
-import type { ICreateUserRequestDTO } from "../../dtos/CreateUserDTO.js";
+import type { ICreateUserRequestDTO, ICreateUserResponseDTO } from "../../dtos/CreateUserDTO.js";
 
 export class CreateUserUseCase {
   
@@ -8,7 +8,7 @@ export class CreateUserUseCase {
     private usersRepository: IUsersRepository
   ){}
 
-  async execute(data: ICreateUserRequestDTO) {
+  async execute(data: ICreateUserRequestDTO): Promise<ICreateUserResponseDTO> {
     const userAlreadyExists = await this.usersRepository.findByEmail(data.email)
 
     if(userAlreadyExists){
@@ -17,6 +17,7 @@ export class CreateUserUseCase {
 
     const user = new User(data)
 
-    await this.usersRepository.save(user)
+    const result = await this.usersRepository.save(user)
+    return result
   }
 }

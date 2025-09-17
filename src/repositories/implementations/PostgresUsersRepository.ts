@@ -1,18 +1,25 @@
 import type { User } from "../../entities/User.js";
 import { prisma } from "../../database/prisma.js";
 import type { IUsersRepository } from "../IUsersRepository.js";
-import type { ICreateUserRequestDTO } from "../../dtos/CreateUserDTO.js";
+import type { ICreateUserRequestDTO, ICreateUserResponseDTO } from "../../dtos/CreateUserDTO.js";
 import type { IUpdateUserRequestDTO } from "../../dtos/UpdateUserDTO.js";
 
 export class PostgresUserRepository implements IUsersRepository {
 
-
-  async save(user: ICreateUserRequestDTO): Promise<void> {
+  async save(user: ICreateUserRequestDTO): Promise<ICreateUserResponseDTO> {
     try {
-      await prisma.user.create({ data: user })
+      const createdUser = await prisma.user.create({
+        data: user,
+        select: {
+          id: true,
+          name: true,
+          email: true,
+          password: true
+        }
+      })
+      return createdUser
     } catch (error) {
-      console.error('error while saving user', error)
-      throw new Error("database error: ", error)
+      throw new Error(`error while saving user: ${error.message}`);
     }
   }
 
@@ -29,7 +36,7 @@ export class PostgresUserRepository implements IUsersRepository {
       const users = prisma.user.findMany()
       return users
     } catch (error) {
-      throw new Error("error while getting users: ", error)
+      throw new Error(`error while getting users: ${error.message}`)
     }
   }
 
